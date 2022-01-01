@@ -12,6 +12,15 @@
   "48": "logo192.png",
   "128": "logo192.png"
 },
+"commands": {
+  "_execute_action": {
+    "suggested_key": {
+      "default": "Ctrl+Shift+F",
+      "mac": "MacCtrl+Shift+F"
+    },
+    "description": "Opens index.html"
+  }
+},
 "permissions": [
   "activeTab"
 ],

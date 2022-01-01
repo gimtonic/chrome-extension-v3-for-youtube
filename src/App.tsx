@@ -30,7 +30,7 @@ const App = () => {
             { type: "GET_DOM" } as DOMMessage,
             (response: DOMMessageResponse) => {
               console.log("response=", response);
-              // setTitle(response.title);
+              setTitle(response.title);
             }
           );
         }
