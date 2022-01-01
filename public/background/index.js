@@ -5,6 +5,12 @@ chrome.runtime.onInstalled.addListener(() => {
   console.log("Default background color set to %cgreen", `color: ${color}`);
 });
 
+// bookmarks
+// Traverse the bookmark tree, and print the folder and nodes.
+chrome.bookmarks.getTree(function (bookmarkTreeNodes) {
+  console.log("bookmarkTreeNodes=", bookmarkTreeNodes);
+});
+
 // create new tab
 // chrome.runtime.onInstalled.addListener(async () => {
 

@@ -36,6 +36,7 @@ const App = () => {
         }
       );
 
+    // Change color
     // Initialize button with users' preferred color
     let changeColor = document.getElementById("changeColor");
 
@@ -65,7 +66,7 @@ const App = () => {
         document.body.style.backgroundColor = color;
       });
     }
-  });
+  }, []);
 
   return (
     <div className="App">
