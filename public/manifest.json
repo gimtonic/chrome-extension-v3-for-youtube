@@ -5,10 +5,17 @@
   "manifest_version": 3,
   "action": {
     "default_popup": "index.html",
-    "default_title": "Open the popup"
+    "default_title": "Open the popup",
+    "default_icon": {
+      "16": "logo192.png",
+      "32": "logo192.png",
+      "48": "logo192.png",
+      "128": "logo192.png"
+    }
 },
 "icons": {
   "16": "logo192.png",
+  "32": "logo192.png",
   "48": "logo192.png",
   "128": "logo192.png"
 },
@@ -21,9 +28,11 @@
     "description": "Opens index.html"
   }
 },
-"permissions": [
-  "activeTab"
-],
+"permissions": ["storage", "activeTab", "scripting"],
+"background": {
+  "service_worker": "background/index.js"
+},
+"options_page": "options/index.html",
 "content_scripts": [
   {
       "matches": ["http://*/*", "https://*/*"],
