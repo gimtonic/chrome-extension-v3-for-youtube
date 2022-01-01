@@ -1,6 +1,12 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Chrome extension v3 for youtube",
+  "name": "Chrome extension v3 for youtube",
+  "version": "1.0",
+  "manifest_version": 3,
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "Open the popup"
+},
   "icons": [
     {
       "src": "favicon.ico",
