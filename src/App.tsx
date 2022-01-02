@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import logo from "./logo.svg";
 import "./App.css";
+import { Button } from "antd";
 
 const App = () => {
   const [title, setTitle] = useState("");
@@ -40,11 +40,12 @@ const App = () => {
     // Initialize button with users' preferred color
     let changeColor = document.getElementById("changeColor");
 
-    chrome.storage.sync.get("color", ({ color }) => {
-      if (changeColor) {
-        changeColor.style.backgroundColor = color;
-      }
-    });
+    chrome.storage &&
+      chrome.storage.sync.get("color", ({ color }) => {
+        if (changeColor) {
+          changeColor.style.backgroundColor = color;
+        }
+      });
 
     // When the button is clicked, inject setPageBackgroundColor into current page
     changeColor?.addEventListener("click", async () => {
@@ -71,8 +72,9 @@ const App = () => {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <button id="changeColor">Change color</button>
+        <Button type="primary" id="changeColor">
+          Change background
+        </Button>
         {title}
       </header>
     </div>
