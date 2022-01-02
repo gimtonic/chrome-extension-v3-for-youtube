@@ -28,20 +28,10 @@
     "description": "Opens index.html"
   }
 },
-"permissions": ["storage", "activeTab", "scripting", "bookmarks","declarativeNetRequest",
-  "declarativeNetRequestFeedback"],
+"permissions": ["storage", "activeTab", "scripting", "bookmarks"],
 "host_permissions": [
   "*://www.youtube.com/*"
 ],
-"declarative_net_request": {
-  "rule_resources": [
-    {
-      "id": "1",
-      "enabled": true,
-      "path": "rules.json"
-    }
-  ]
-},
 "background": {
   "service_worker": "./static/js/background.js"
 },

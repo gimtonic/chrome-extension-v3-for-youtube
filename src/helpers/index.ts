@@ -4,18 +4,21 @@ export const executeScriptNotRecomendsVideo = () => {
     logo.style.display = "none";
   }
 
-  const mainIcon = document.querySelector("[title=Главная]");
-  if (mainIcon) {
-    (mainIcon as HTMLElement).style.display = "none";
+  const sections = document.getElementById("sections");
+  if (sections) {
+    sections.style.display = "none";
   }
 
-  const navigatorIcon = document.querySelector("[title=Навигатор]");
-  if (navigatorIcon) {
-    (navigatorIcon as HTMLElement).style.display = "none";
-  }
+  setTimeout(() => {
+    const items = document.getElementsByClassName(
+      "style-scope ytd-mini-guide-renderer"
+    );
 
-  const libraryIcon = document.querySelector("[title=Библиотека]");
-  if (libraryIcon) {
-    (libraryIcon as HTMLElement).style.display = "none";
-  }
+    if (items.length > 0) {
+      console.log("items=", items);
+      (items[1] as HTMLElement).style.display = "none";
+      (items[3] as HTMLElement).style.display = "none";
+      (items[4] as HTMLElement).style.display = "none";
+    }
+  }, 2000);
 };
