@@ -1,9 +1,64 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import "./App.css";
 import { Button, Switch, Card, Space } from "antd";
+import { getItem, setItem } from "./store";
+import { executeScriptNotRecomendsVideo } from "./helpers";
 
 const App = () => {
   const [title, setTitle] = useState("");
+  const [isChecked, setIsChecked] = useState(false);
+
+  const setDefaultIsChecked = useCallback(async () => {
+    const isChecked = (await getItem("isChecked")) as boolean;
+    setIsChecked(isChecked ?? false);
+  }, []);
+
+  const handleChangeBackground = async () => {
+    let [tab] = await chrome.tabs.query({
+      active: true,
+      currentWindow: true,
+    });
+
+    chrome.scripting.executeScript({
+      target: { tabId: Number(tab.id) },
+      func: executeScriptSetPageBackgroundColor,
+    });
+  };
+
+  const executeScriptSetPageBackgroundColor = () => {
+    console.log("change background color");
+    chrome.storage.sync.get("color", ({ color }) => {
+      console.log("color=", color);
+      document.body.style.backgroundColor = color;
+    });
+  };
+
+  const handleNotRecomendsVideo = useCallback(async (checked: boolean) => {
+    console.log("checked=", checked);
+    setIsChecked(checked);
+    await setItem("isChecked", checked);
+
+    if (checked) {
+      const [tab] = await chrome.tabs.query({
+        active: true,
+        currentWindow: true,
+      });
+      chrome.scripting.executeScript({
+        target: { tabId: Number(tab.id) },
+        func: executeScriptNotRecomendsVideo,
+      });
+
+      // /feed/subscriptions
+    }
+  }, []);
+
+  useEffect(() => {
+    setDefaultIsChecked();
+  }, [setDefaultIsChecked]);
+
+  useEffect(() => {
+    handleNotRecomendsVideo(isChecked);
+  }, [handleNotRecomendsVideo, isChecked]);
 
   useEffect(() => {
     /**
@@ -37,43 +92,6 @@ const App = () => {
       );
   }, []);
 
-  const handleChangeBackground = async () => {
-    let [tab] = await chrome.tabs.query({
-      active: true,
-      currentWindow: true,
-    });
-
-    chrome.scripting.executeScript({
-      target: { tabId: Number(tab.id) },
-      func: executeScriptSetPageBackgroundColor,
-    });
-  };
-
-  const executeScriptSetPageBackgroundColor = () => {
-    console.log("change background color");
-    chrome.storage.sync.get("color", ({ color }) => {
-      console.log("color=", color);
-      document.body.style.backgroundColor = color;
-    });
-  };
-
-  const handleNotRecomendsVideo = async (checked: boolean) => {
-    console.log(`switch to ${checked}`);
-
-    const [tab] = await chrome.tabs.query({
-      active: true,
-      currentWindow: true,
-    });
-    chrome.scripting.executeScript({
-      target: { tabId: Number(tab.id) },
-      func: executeScriptNotRecomendsVideo,
-    });
-  };
-
-  const executeScriptNotRecomendsVideo = () => {
-    console.log("disable");
-  };
-
   return (
     <div className="App">
       <header className="App-header">
@@ -85,7 +103,7 @@ const App = () => {
           </p>
           <p>
             <Space size="small">
-              <Switch defaultChecked onChange={handleNotRecomendsVideo} />
+              <Switch checked={isChecked} onChange={handleNotRecomendsVideo} />
               Not recomends video
             </Space>
           </p>

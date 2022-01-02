@@ -5,12 +5,43 @@ chrome.runtime.onInstalled.addListener(() => {
   console.log("Default background color set to %cgreen", `color: ${color}`);
 });
 
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message === "is-loading") {
+    let isLoading = false;
+    chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+      if (changeInfo.status === "complete") {
+        isLoading = true;
+      }
+    });
+
+    sendResponse(isLoading);
+  }
+});
+
 // bookmarks
 // Traverse the bookmark tree, and print the folder and nodes.
 chrome.bookmarks.getTree(function (bookmarkTreeNodes) {
   console.log("bookmarkTreeNodes=", bookmarkTreeNodes);
 });
 
+// chrome.tabs.onUpdated.addListener(
+//   async (tabId: any, changeInfo: any, tab: any) => {
+//     console.log("changeInfo=", changeInfo);
+//     console.log("tab=", tab);
+//     if (changeInfo.status === "complete" && tab.active) {
+//       const [tab] = await chrome.tabs.query({
+//         active: true,
+//         currentWindow: true,
+//       });
+//       chrome.scripting.executeScript({
+//         target: { tabId: Number(tab.id) },
+//         func: executeScriptNotRecomendsVideo,
+//       });
+//     }
+//   }
+// );
+
+export {};
 // create new tab
 // chrome.runtime.onInstalled.addListener(async () => {
 
