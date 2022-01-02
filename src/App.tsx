@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import { Button } from "antd";
+import { Button, Switch, Card, Space } from "antd";
 
 const App = () => {
   const [title, setTitle] = useState("");
@@ -35,47 +35,61 @@ const App = () => {
           );
         }
       );
+  }, []);
 
-    // Change color
-    // Initialize button with users' preferred color
-    let changeColor = document.getElementById("changeColor");
-
-    chrome.storage &&
-      chrome.storage.sync.get("color", ({ color }) => {
-        if (changeColor) {
-          changeColor.style.backgroundColor = color;
-        }
-      });
-
-    // When the button is clicked, inject setPageBackgroundColor into current page
-    changeColor?.addEventListener("click", async () => {
-      let [tab] = await chrome.tabs.query({
-        active: true,
-        currentWindow: true,
-      });
-
-      chrome.scripting.executeScript({
-        target: { tabId: Number(tab.id) },
-        func: setPageBackgroundColor,
-      });
+  const handleChangeBackground = async () => {
+    let [tab] = await chrome.tabs.query({
+      active: true,
+      currentWindow: true,
     });
 
-    // The body of this function will be executed as a content script inside the
-    // current page
-    function setPageBackgroundColor() {
-      chrome.storage.sync.get("color", ({ color }) => {
-        document.body.style.backgroundColor = color;
-      });
-    }
-  }, []);
+    chrome.scripting.executeScript({
+      target: { tabId: Number(tab.id) },
+      func: executeScriptSetPageBackgroundColor,
+    });
+  };
+
+  const executeScriptSetPageBackgroundColor = () => {
+    console.log("change background color");
+    chrome.storage.sync.get("color", ({ color }) => {
+      console.log("color=", color);
+      document.body.style.backgroundColor = color;
+    });
+  };
+
+  const handleNotRecomendsVideo = async (checked: boolean) => {
+    console.log(`switch to ${checked}`);
+
+    const [tab] = await chrome.tabs.query({
+      active: true,
+      currentWindow: true,
+    });
+    chrome.scripting.executeScript({
+      target: { tabId: Number(tab.id) },
+      func: executeScriptNotRecomendsVideo,
+    });
+  };
+
+  const executeScriptNotRecomendsVideo = () => {
+    console.log("disable");
+  };
 
   return (
     <div className="App">
       <header className="App-header">
-        <Button type="primary" id="changeColor">
-          Change background
-        </Button>
-        {title}
+        <Card title={title} style={{ width: 300 }}>
+          <p>
+            <Button type="primary" onClick={handleChangeBackground}>
+              Change background
+            </Button>
+          </p>
+          <p>
+            <Space size="small">
+              <Switch defaultChecked onChange={handleNotRecomendsVideo} />
+              Not recomends video
+            </Space>
+          </p>
+        </Card>
       </header>
     </div>
   );
