@@ -17,7 +17,7 @@ export const executeScriptNotRecomendsVideo = () => {
     if (items.length > 0) {
       console.log("items=", items);
       (items[1] as HTMLElement).style.display = "none";
-      (items[3] as HTMLElement).style.display = "none";
+      (items[2] as HTMLElement).style.display = "none";
       (items[4] as HTMLElement).style.display = "none";
     }
   }, 2000);
