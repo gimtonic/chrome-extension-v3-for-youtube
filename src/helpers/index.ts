@@ -30,7 +30,7 @@ export const executeScriptNotSearchNotRecomendsVideo = () => {
     searchInput.onchange = (e) => {
       const notsearchVideoTags = [
         "hardcore",
-        "mma",
+        "мма",
         "куплинов",
         "labelcom",
         "наше дело",
@@ -57,6 +57,7 @@ export const executeScriptNotSearchNotRecomendsVideo = () => {
       };
 
       const { value: searchText } = e.target as HTMLInputElement;
+      console.log("searchText=", searchText);
       const isFilterSearch = filterSearch(searchText);
 
       if (isFilterSearch) {
