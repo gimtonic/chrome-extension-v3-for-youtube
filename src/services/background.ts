@@ -1,4 +1,7 @@
-import { executeScriptNotRecomendsVideo } from "../helpers";
+import {
+  executeScriptDisabledButtons,
+  executeScriptNotSearchNotRecomendsVideo,
+} from "../helpers";
 
 const color = "#3aa757";
 
@@ -33,9 +36,15 @@ chrome.tabs.onUpdated.addListener(async function (tabId, changeInfo, tab) {
       active: true,
       currentWindow: true,
     });
+
     chrome.scripting.executeScript({
       target: { tabId: Number(tab.id) },
-      func: executeScriptNotRecomendsVideo,
+      func: executeScriptDisabledButtons,
+    });
+
+    chrome.scripting.executeScript({
+      target: { tabId: Number(tab.id) },
+      func: executeScriptNotSearchNotRecomendsVideo,
     });
   }
 });
